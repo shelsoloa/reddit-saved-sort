@@ -14,5 +14,5 @@ export async function getSavedPosts() {
 		password: REDDIT_PASS
 	});
 
-	return await r.getMe().getSavedContent().fetchAll();
+	return await r.getMe().getSavedContent() // .fetchAll();
 }

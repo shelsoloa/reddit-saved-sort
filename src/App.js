@@ -1,7 +1,35 @@
 import React from 'react';
 import { getSavedPosts } from './reddit.js';
 
-import './App.css';
+import { makeStyles } from '@material-ui/core/styles';
+import { AppBar, Button, Divider, CssBaseline, Drawer, List, ListItem, ListItemText, Toolbar, Typography
+} from '@material-ui/core';
+
+
+const drawerWidth = 240;
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(3),
+  },
+}));
 
 
 class App extends React.Component {
@@ -31,13 +59,32 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
-        <header>
-          <h1>Reddit Saved Sort</h1>
-        </header>
-
+      <div
+        style={{
+          display: 'flex'
+        }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          style={{
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth}}
+          >
+            <Toolbar>
+            <Typography variant="h6" noWrap>
+              Header
+            </Typography>
+            </Toolbar>
+        </AppBar>
         <SubredditList subreddits={this.state.subreddits} />
-        <PostList posts={this.state.posts} />
+        <main
+          style={{
+            flexGrow: 1
+          }}
+          >
+          <Toolbar/>
+          <PostList posts={this.state.posts} />
+        </main>
       </div>
     );
   }
@@ -47,13 +94,25 @@ class App extends React.Component {
 class SubredditList extends React.Component {
   render() {
     return (
-      <ul>
-        {
-          this.props.subreddits.map((sub) => (
-            <li>{sub}</li>
-          ))
-        }
-      </ul>
+      <Drawer
+        anchor="left"
+        variant="permanent"
+        style={{
+          flexShrink: 0,
+          width: drawerWidth
+        }}
+      >
+        <Divider />
+        <List>
+          {
+            this.props.subreddits.map((sub) => (
+              <ListItem button key={sub}>
+                <ListItemText primary={sub}/>
+              </ListItem>
+            ))
+          }
+        </List>
+      </Drawer>
     )
   }
 }
